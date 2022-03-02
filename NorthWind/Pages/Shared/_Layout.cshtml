@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using NorthWind.Enums
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -17,17 +18,61 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Products/Index">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                    @{
+                        var user = SessionHelper.GetObjectFromJson<Account>(@Context.Session, "user");
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Products/Index">Products</a>
+                            </li>
+                            @if(user != null)
+                            {
+                                @if(user.Type == AccountType.Staff)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Categories/Index">Categories</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Suppliers/Index">Suppliers</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Orders/Index">Orders</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Accounts/Index">Accounts</a>
+                                    </li>
+                                }
+                            }
+
+                        </ul>
+                        @if(user == null)
+                        {
+                            <div class="form-inline my-2 my-lg-0">
+                              <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><a asp-area="" asp-page="/Login">Login</a></button>
+                              <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"><a asp-area="" asp-page="/Register">Register</a></button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="dropdown form-inline my-2 my-lg-0">
+                              <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Hello, @user.UserName
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" asp-page="/Profile/Index">Profile</a>
+                                    @if(user.Type == AccountType.Member)
+                                    {
+
+                                        <a class="dropdown-item" asp-page="/Profile/Cart">Shopping Cart</a>
+                                        <a class="dropdown-item" asp-page="/Orders/Index">Purchase History</a>
+                                    }
+                                <a class="dropdown-item" asp-page="/Logout">Logout</a>
+                              </div>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </nav>

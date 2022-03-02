@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NorthWind.Enums;
+using NorthWind.Filters;
 using NorthWind.Models;
 
 namespace NorthWind.Pages.Accounts
 {
+    [AuthorizationFilter(AccountType.Staff)]
     public class EditModel : PageModel
     {
         private readonly NorthWind.Models.ApplicationDbContext _context;

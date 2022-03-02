@@ -7,24 +7,26 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using NorthWind.Enums;
 using NorthWind.Filters;
+using NorthWind.Helpers;
 using NorthWind.Models;
 
-namespace NorthWind.Pages.Accounts
+namespace NorthWind.Pages.Profile
 {
-    [AuthorizationFilter(AccountType.Staff)]
-    public class DetailsModel : PageModel
+    [AuthorizationFilter]
+    public class InfoModel : PageModel
     {
         private readonly NorthWind.Models.ApplicationDbContext _context;
 
-        public DetailsModel(NorthWind.Models.ApplicationDbContext context)
+        public InfoModel(NorthWind.Models.ApplicationDbContext context)
         {
             _context = context;
         }
 
         public Account Account { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
+            var user = SessionHelper.GetObjectFromJson<Account>(HttpContext.Session, "user");
             if (id == null)
             {
                 return NotFound();

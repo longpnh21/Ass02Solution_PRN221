@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NorthWind.Enums;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -11,6 +12,6 @@ namespace NorthWind.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
-        public int? Type { get; set; }
+        public AccountType? Type { get; set; }
     }
 }

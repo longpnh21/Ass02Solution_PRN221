@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NorthWind.Enums;
+using NorthWind.Filters;
 using NorthWind.Models;
 
 namespace NorthWind.Pages.Categories
 {
+    [AuthorizationFilter(AccountType.Staff)]
     public class CreateModel : PageModel
     {
         private readonly NorthWind.Models.ApplicationDbContext _context;

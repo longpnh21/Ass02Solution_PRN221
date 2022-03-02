@@ -6,11 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using NorthWind.Enums;
+using NorthWind.Filters;
+using NorthWind.Helpers;
 using NorthWind.Models;
 using NorthWind.Paging;
 
 namespace NorthWind.Pages.Orders
 {
+    [AuthorizationFilter]
     public class IndexModel : PageModel
     {
         private readonly NorthWind.Models.ApplicationDbContext _context;
@@ -46,6 +50,12 @@ namespace NorthWind.Pages.Orders
 
             IQueryable<Order> query = from o in _context.Orders
                                       select o;
+
+            var user = SessionHelper.GetObjectFromJson<Account>(HttpContext.Session, "user");
+            if (user != null && user.Type == AccountType.Member)
+            {
+                query = query.Where(o => o.CustomerId.Equals(user.UserName));
+            }
 
             if (!string.IsNullOrWhiteSpace(searchString))
             {

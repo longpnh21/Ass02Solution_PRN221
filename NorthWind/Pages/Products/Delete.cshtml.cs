@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using NorthWind.Enums;
+using NorthWind.Filters;
 using NorthWind.Models;
 
 namespace NorthWind.Pages.Products
 {
+    [AuthorizationFilter(AccountType.Staff)]
     public class DeleteModel : PageModel
     {
         private readonly NorthWind.Models.ApplicationDbContext _context;

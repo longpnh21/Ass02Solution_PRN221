@@ -6,11 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using NorthWind.Enums;
+using NorthWind.Filters;
+using NorthWind.Helpers;
 using NorthWind.Models;
 using NorthWind.Paging;
 
 namespace NorthWind.Pages.Accounts
 {
+    [AuthorizationFilter(AccountType.Staff)]
     public class IndexModel : PageModel
     {
         private readonly NorthWind.Models.ApplicationDbContext _context;
