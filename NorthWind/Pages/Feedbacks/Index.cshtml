@@ -1,0 +1,96 @@
+﻿@page
+@model NorthWind.Pages.Feedbacks.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Feedbacks</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="searchString" value="@Model.CurrentFilter"/>
+            <input type="submit" class="btn btn-primary" value="Search"/>
+            <a asp-page="./Index">Back to full list</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.TitleSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Feedbacks[0].Ftitle)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Feedbacks[0].Fcontent)
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Feedbacks[0].Fdate)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.CustomerIdSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Feedbacks[0].Customer)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Feedbacks) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ftitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fcontent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.CustomerId)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Fid">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Fid">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Fid">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.Feedbacks.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Feedbacks.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+    asp-route-sortOrder = "@Model.CurrentSort"
+    asp-route-pageIndex = "@(Model.Feedbacks.PageIndex - 1)";
+    asp-route-currentFilter ="@Model.CurrentFilter"
+    class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+
+<a asp-page="./Index"
+    asp-route-sortOrder = "@Model.CurrentSort"
+    asp-route-pageIndex = "@(Model.Feedbacks.PageIndex + 1)";
+    asp-route-currentFilter ="@Model.CurrentFilter"
+    class="btn btn-primary @nextDisabled">
+    Next
+</a>

@@ -1,0 +1,98 @@
+﻿@page
+@model NorthWind.Pages.Accounts.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Accounts</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find:
+            <input type="text" name="searchString" value="@Model.CurrentFilter"/>
+            <input type="submit" class="btn btn-primary" value="Search"/>
+            <a asp-page="./Index">Back to full list</a>
+        </p>
+    </div>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Accounts[0].UserName)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Accounts[0].Password)
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.FullNameSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Accounts[0].FullName)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.TypeSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                   @Html.DisplayNameFor(model => model.Accounts[0].Type)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Accounts) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.AccountId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.AccountId">Details</a> |
+                 <a asp-page="./Delete" asp-route-id="@item.AccountId">Delete</a>
+
+            </td> 
+        </tr>
+}
+    </tbody>
+</table>
+
+
+@{
+    var prevDisabled = !Model.Accounts.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Accounts.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Accounts.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Accounts.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>

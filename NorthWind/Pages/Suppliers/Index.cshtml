@@ -1,0 +1,87 @@
+﻿@page
+@model NorthWind.Pages.Suppliers.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="searchString" value="@Model.CurrentFilter"/>
+            <input type="submit" class="btn btn-primary" value="Search"/>
+            <a asp-page="./Index">Back to full list</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                @Html.DisplayNameFor(model => model.Suppliers[0].CompanyName)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.AddressSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                @Html.DisplayNameFor(model => model.Suppliers[0].Address)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Suppliers[0].Phone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Suppliers) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.SupplierId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.SupplierId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.SupplierId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+@{
+    var prevDisabled = !Model.Suppliers.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Suppliers.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Suppliers.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Suppliers.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>

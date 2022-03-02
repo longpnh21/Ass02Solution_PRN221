@@ -1,0 +1,107 @@
+﻿@page
+@model NorthWind.Pages.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Products</h1>
+
+<p>
+    <a asp-page="Create">Create New Product</a>
+</p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="searchString" value="@Model.CurrentFilter"/>
+            <input type="submit" class="btn btn-primary" value="Search"/>
+            <a asp-page="./Index">Back to full list</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Products[0].ProductName)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].QuantityPerUnit)
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.UnitPriceSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Products[0].UnitPrice)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].ProductImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Products[0].Supplier)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Products) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuantityPerUnit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Supplier.CompanyName)
+            </td>
+@*            @if (Model.CurrentUser != null && Model.CurrentUser.Type == 1)
+            {*@
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ProductId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ProductId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ProductId">Delete</a>
+                </td>
+@*            }*@
+        </tr>
+    }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Products.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Products.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>

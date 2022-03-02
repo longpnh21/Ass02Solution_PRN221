@@ -1,0 +1,78 @@
+﻿@page
+@model NorthWind.Pages.Categories.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Categories</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="searchString" value="@Model.CurrentFilter"/>
+            <input type="submit" class="btn btn-primary" value="Search"/>
+            <a asp-page="./Index">Back to full list</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.NameSort"
+                asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Categories[0].CategoryName)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categories[0].Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Categories) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.CategoryId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.CategoryId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.CategoryId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.Categories.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Categories.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+    asp-route-sortOrder = "@Model.CurrentSort"
+    asp-route-pageIndex = "@(Model.Categories.PageIndex - 1)";
+    asp-route-currentFilter ="@Model.CurrentFilter"
+    class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+
+<a asp-page="./Index"
+    asp-route-sortOrder = "@Model.CurrentSort"
+    asp-route-pageIndex = "@(Model.Categories.PageIndex + 1)";
+    asp-route-currentFilter ="@Model.CurrentFilter"
+    class="btn btn-primary @nextDisabled">
+    Next
+</a>
